@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PC Dashboard</title>
+  <link rel="icon" href="../favicon.ico">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .info-box {
+      margin-bottom: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px;
+      font-size: 16px;
+      margin: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Dashboard de contrôle PC</h1>
+  <div class="info-box">
+    <h2>RAM Utilisée : <span id="ram"></span> GB</h2>
+    <h2>Température CPU : <span id="temperature"></span> °C</h2>
+  </div>
+  <div class="info-box">
+    <h2>Performance</h2>
+    <button onclick="setPerformance('high')">Mode Performance</button>
+    <button onclick="setPerformance('balanced')">Mode Équilibré</button>
+    <button onclick="setPerformance('power_saver')">Mode Économie d'énergie</button>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
