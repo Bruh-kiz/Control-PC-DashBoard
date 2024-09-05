@@ -1,38 +1,18 @@
-const si = require('systeminformation');
+const systeminformation = require('systeminformation');
 
-// Fonction pour récupérer et afficher la RAM et la température
-function updateSystemInfo() {
-  si.mem().then(data => {
-    const ramGB = (data.used / 1073741824).toFixed(2);
-    document.getElementById('ram').innerText = ramGB;
-  });
+document.addEventListener('DOMContentLoaded', () => {
+  updateSystemInfo();
+});
 
-  si.cpuTemperature().then(data => {
-    document.getElementById('temperature').innerText = data.main;
-  });
-}
+async function updateSystemInfo() {
+  try {
+    const ram = await systeminformation.mem();
+    const cpuTemp = await systeminformation.sensors();
+    
+    document.getElementById('ram').innerText = `RAM: ${(ram.total / (1024 * 1024 * 1024)).toFixed(2)} GB`;
+    document.getElementById('cpu-temp').innerText = `CPU Temperature: ${cpuTemp.main[0].temperature.toFixed(1)} °C`;
 
-// Fonction pour changer le mode de performance
-function setPerformance(mode) {
-  let cmd = '';
-
-  if (mode === 'high') {
-    cmd = 'powercfg -setactive SCHEME_MIN';
-  } else if (mode === 'balanced') {
-    cmd = 'powercfg -setactive SCHEME_BALANCED';
-  } else if (mode === 'power_saver') {
-    cmd = 'powercfg -setactive SCHEME_MAX';
+  } catch (error) {
+    console.error('Failed to retrieve system information:', error);
   }
-
-  const { exec } = require('child_process');
-  exec(cmd, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Erreur de changement de mode : ${error.message}`);
-      return;
-    }
-    console.log(`Mode changé en ${mode}`);
-  });
 }
-
-// Mettre à jour les informations toutes les 5 secondes
-setInterval(updateSystemInfo, 5000);

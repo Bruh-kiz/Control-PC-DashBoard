@@ -1,7 +1,7 @@
 {
   "name": "control-pc",
   "version": "1.0.0",
-  "main": "main.js",
+  "main": "src/main.js",
   "scripts": {
     "start": "electron .",
     "build": "electron-builder --win --publish always"
@@ -21,7 +21,8 @@
   },
   "dependencies": {
     "electron": "^32.0.2",
-    "electron-updater": "^4.3.9"
+    "electron-updater": "^4.3.9",
+    "systeminformation": "^5.23.5"
   },
   "devDependencies": {
     "electron-builder": "^23.6.0"
