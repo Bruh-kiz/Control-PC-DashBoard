@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Checkout code
@@ -21,14 +21,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Read version from package.json
-        id: get_version
-        run: |
-          VERSION=$(node -p "require('./package.json').version")
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-
       - name: Build app
-        run: npm run build
+        run: npm run pack
 
       - name: Create Release
         id: create_release
@@ -36,8 +30,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.VERSION }}
-          release_name: Release ${{ env.VERSION }}
+          tag_name: v${{ steps.version.outputs.version }}
+          release_name: Release ${{ steps.version.outputs.version }}
           draft: false
           prerelease: false
 
@@ -47,6 +41,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dist/win-unpacked/control-pc-setup.exe
-          asset_name: control-pc-${{ env.VERSION }}.exe
+          asset_path: ./dist/win-unpacked/your-app-setup.exe
+          asset_name: your-app-setup-${{ steps.version.outputs.version }}.exe
           asset_content_type: application/octet-stream
