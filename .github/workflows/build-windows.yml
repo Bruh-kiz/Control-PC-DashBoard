@@ -1,4 +1,4 @@
-name: Build Electron App for Windows
+name: Build and Release Electron App
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
@@ -21,11 +21,24 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build Electron app for Windows
+      - name: Generate version file
+        run: npm run version-file
+
+      - name: Build Electron App
         run: npm run build
 
-      - name: Publish release to GitHub
+      - name: Create a release on GitHub
         uses: softprops/action-gh-release@v1
         with:
           files: |
             dist/*.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Tag and release
+        id: tag
+        run: |
+          VERSION=$(cat version.txt)
+          echo "Version: $VERSION"
+          git tag "v$VERSION"
+          git push origin "v$VERSION"
