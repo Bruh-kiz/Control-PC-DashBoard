@@ -7,7 +7,7 @@
     "build": {
       "appId": "pc.control.kiz",
       "win": {
-        "target": "nsis",  // Utilise NSIS pour créer un installateur Windows
+        "target": "nsis",
         "publish": [
           {
             "provider": "github",
