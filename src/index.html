@@ -1,15 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Control PC</title>
-  <link rel="icon" href="favicon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PC Control App</title>
+    <link rel="icon" href="favicon.ico">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            padding: 20px;
+        }
+        #info {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-  <h1>Control PC</h1>
-  <p id="ram">RAM: Loading...</p>
-  <p id="cpu-temp">CPU Temperature: Loading...</p>
-  <script src="renderer.js"></script>
+    <div class="container">
+        <h1>PC Control Dashboard</h1>
+        <div id="info">
+            <p><strong>RAM Usage:</strong> <span id="ram"></span></p>
+            <p><strong>CPU Load:</strong> <span id="cpu"></span></p>
+            <p><strong>GPU Load:</strong> <span id="gpu"></span></p>
+        </div>
+    </div>
+    <script src="renderer.js"></script>
 </body>
 </html>

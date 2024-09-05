@@ -1,15 +1,31 @@
 {
-  "name": "control-pc",
+  "name": "pc-control-app",
   "version": "1.0.0",
-  "main": "src/main.js",
+  "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder --win --publish always"
+    "build": "electron-builder",
+    "pack": "electron-builder --dir"
   },
   "build": {
-    "appId": "pc.control.kiz",
+    "appId": "pc.control.app",
+    "productName": "PC Control App",
+    "files": [
+      "main.js",
+      "index.html",
+      "renderer.js",
+      "favicon.ico",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "build",
+      "output": "dist"
+    },
     "win": {
-      "target": "nsis",
+      "target": [
+        "nsis"
+      ],
+      "icon": "build/icon.ico",
       "publish": [
         {
           "provider": "github",
@@ -19,12 +35,14 @@
       ]
     }
   },
-  "dependencies": {
+  "keywords": [],
+  "author": "kiz___",
+  "license": "ISC",
+  "devDependencies": {
     "electron": "^32.0.2",
-    "electron-updater": "^4.3.9",
+    "electron-builder": "^24.0.0",
+    "electron-is-dev": "^2.0.0",
     "systeminformation": "^5.23.5"
   },
-  "devDependencies": {
-    "electron-builder": "^23.6.0"
-  }
+  "dependencies": {}
 }

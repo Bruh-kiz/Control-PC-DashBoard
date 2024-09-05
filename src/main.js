@@ -1,8 +1,27 @@
-const { app, BrowserWindow, dialog } = require('electron');
-const { autoUpdater } = require('electron-updater');
+const { app, BrowserWindow, autoUpdater, dialog } = require('electron');
 const path = require('path');
+const isDev = require('electron-is-dev');
 const { exec } = require('child_process');
 const systeminformation = require('systeminformation');
+
+// Fonction pour vérifier et demander des privilèges d'administrateur
+function runAsAdmin() {
+  if (process.platform === 'win32') {
+    const spawn = require('child_process').spawn;
+    const proc = spawn(process.argv[0], process.argv.slice(1), {
+      detached: true,
+      stdio: 'inherit',
+      windowsVerbatimArguments: true,
+      shell: true
+    });
+    proc.unref();
+    app.quit();
+  }
+}
+
+if (require('electron-squirrel-startup')) {
+  runAsAdmin();
+}
 
 let mainWindow;
 
@@ -10,36 +29,29 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    icon: path.join(__dirname, 'favicon.ico'),
     webPreferences: {
+      preload: path.join(__dirname, 'renderer.js'),
       nodeIntegration: true,
-      contextIsolation: false,
-      preload: path.join(__dirname, 'renderer.js')
+      contextIsolation: false
     }
   });
 
-  mainWindow.loadFile(path.join(__dirname, 'index.html'));
+  mainWindow.loadFile('index.html');
 
-  mainWindow.on('closed', () => {
-    mainWindow = null;
-  });
+  if (isDev) {
+    mainWindow.webContents.openDevTools();
+  }
 
-  // Check for updates
-  autoUpdater.checkForUpdatesAndNotify();
+  // Auto-update
+  if (!isDev) {
+    const server = 'https://update.electronjs.org';
+    const feed = `${server}/${app.getName()}/${process.platform}-${process.arch}/${app.getVersion()}`;
+    autoUpdater.setFeedURL(feed);
+    autoUpdater.checkForUpdates();
+  }
 }
 
-// Admin rights on Windows
-app.on('ready', () => {
-  if (process.platform === 'win32') {
-    exec('powershell.exe -Command "Start-Process ' + app.getPath('exe') + ' -Verb RunAs"', (err) => {
-      if (err) {
-        console.error('Failed to elevate privileges');
-      }
-    });
-  } else {
-    createWindow();
-  }
-});
+app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -47,22 +59,24 @@ app.on('window-all-closed', () => {
   }
 });
 
+app.on('activate', () => {
+  if (mainWindow === null) {
+    createWindow();
+  }
+});
+
 autoUpdater.on('update-available', () => {
-  dialog.showMessageBox({
+  dialog.showMessageBox(mainWindow, {
     type: 'info',
     title: 'Update Available',
-    message: 'A new version is available. Downloading...',
-    buttons: ['OK']
+    message: 'A new version is available. Downloading now...'
   });
 });
 
 autoUpdater.on('update-downloaded', () => {
-  dialog.showMessageBox({
+  dialog.showMessageBox(mainWindow, {
     type: 'info',
     title: 'Update Ready',
-    message: 'The update has been downloaded. Restart the application to apply the update.',
-    buttons: ['Restart']
-  }).then(() => {
-    autoUpdater.quitAndInstall();
+    message: 'Update downloaded; it will be installed on restart.'
   });
 });
