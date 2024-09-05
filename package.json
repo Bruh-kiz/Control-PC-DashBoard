@@ -18,14 +18,24 @@
           "repo": "tonDepotGithub"
         }
       ]
-    }
+    },
+    "files": [
+      "dist/**/*",
+      "node_modules/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "path/to/extra/resources",
+        "to": "resources/"
+      }
+    ]
   },
   "keywords": [],
   "author": "kiz___",
   "license": "ISC",
   "devDependencies": {
     "electron": "^32.0.2",
-    "electron-builder": "^23.0.0"
+    "electron-builder": "^23.6.0"
   },
   "dependencies": {
     "boolean": "^3.2.0",
