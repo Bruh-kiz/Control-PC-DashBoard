@@ -13,11 +13,11 @@
             "provider": "github",
             "owner": "tonNomGithub",
             "repo": "tonDepotGithub"
-          }
-        ]
-      }
-    }
-}
+          },
+        ],
+      },
+    },
+},
   },
   "keywords": [],
   "author": "kiz___",
