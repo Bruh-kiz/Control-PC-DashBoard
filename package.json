@@ -4,26 +4,28 @@
   "main": "index.js",
   "scripts": {
     "start": "electron .",
-    "build": {
-      "appId": "pc.control.kiz",
-      "win": {
-        "target": "nsis",
-        "publish": [
-          {
-            "provider": "github",
-            "owner": "tonNomGithub",
-            "repo": "tonDepotGithub"
-          },
-        ],
-      },
-    },
-},
+    "build": "electron-builder --win --publish always",
+    "version-file": "node -p \"require('./package.json').version\" > version.txt"
+  },
+  "build": {
+    "appId": "pc.control.kiz",
+    "win": {
+      "target": "nsis",
+      "publish": [
+        {
+          "provider": "github",
+          "owner": "tonNomGithub",
+          "repo": "tonDepotGithub"
+        }
+      ]
+    }
   },
   "keywords": [],
   "author": "kiz___",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^32.0.2"
+    "electron": "^32.0.2",
+    "electron-builder": "^23.0.0"
   },
   "dependencies": {
     "boolean": "^3.2.0",
